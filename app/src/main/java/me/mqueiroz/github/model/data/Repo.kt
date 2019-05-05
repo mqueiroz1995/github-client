@@ -157,7 +157,7 @@ data class Repo(
     val hasPages: Boolean? = null,
 
     @Json(name = "owner")
-    val owner: Owner? = null,
+    val owner: Owner,
 
     @Json(name = "commits_url")
     val commitsUrl: String? = null,

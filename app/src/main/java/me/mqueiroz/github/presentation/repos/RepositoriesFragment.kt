@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_repositories.*
 import me.mqueiroz.github.R
@@ -33,10 +35,10 @@ class RepositoriesFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.github.com/")
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(MoshiConverterFactory.create())
-            .build()
+                .baseUrl("https://api.github.com/")
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(MoshiConverterFactory.create())
+                .build()
 
         val api = retrofit.create(GithubService::class.java)
 
@@ -53,9 +55,14 @@ class RepositoriesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        recycler_view.layoutManager = LinearLayoutManager(context)
         adapter = ReposAdapter()
         recycler_view.adapter = adapter
+
+        val layoutManager = LinearLayoutManager(context)
+        recycler_view.layoutManager = layoutManager
+
+        val dividerItemDecoration = DividerItemDecoration(recycler_view.context, layoutManager.orientation)
+        recycler_view.addItemDecoration(dividerItemDecoration)
 
         viewModel.repos.observe(this, Observer { repos ->
             adapter.setRepos(repos)
