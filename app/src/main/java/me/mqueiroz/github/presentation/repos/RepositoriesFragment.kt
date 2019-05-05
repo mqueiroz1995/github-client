@@ -53,8 +53,8 @@ class RepositoriesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = ReposAdapter(context!!)
         recycler_view.layoutManager = LinearLayoutManager(context)
+        adapter = ReposAdapter()
         recycler_view.adapter = adapter
 
         viewModel.repos.observe(this, Observer { repos ->
