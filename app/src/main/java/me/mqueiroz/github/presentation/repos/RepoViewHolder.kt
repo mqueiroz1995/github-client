@@ -1,7 +1,6 @@
-package me.mqueiroz.github.presentation.repositories
+package me.mqueiroz.github.presentation.repos
 
 import android.view.View
-import android.widget.TextView
 import kotlinx.android.synthetic.main.list_item_repo.view.*
 import me.mqueiroz.github.model.data.Repo
 import me.mqueiroz.github.presentation.base.BaseViewHolder

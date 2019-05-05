@@ -1,4 +1,4 @@
-package me.mqueiroz.github.presentation.repositories
+package me.mqueiroz.github.presentation.repos
 
 import android.content.Context
 import android.view.LayoutInflater
