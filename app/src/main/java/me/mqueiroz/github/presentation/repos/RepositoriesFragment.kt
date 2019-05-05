@@ -1,4 +1,4 @@
-package me.mqueiroz.github.presentation.repositories
+package me.mqueiroz.github.presentation.repos
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_repositories.*
 import me.mqueiroz.github.R
 import me.mqueiroz.github.model.GithubRepositoryImpl
+import me.mqueiroz.github.model.network.GithubService
+import me.mqueiroz.github.utils.schedulers.RuntimeSchedulerProvider
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 
 class RepositoriesFragment : Fragment() {
 
@@ -27,8 +32,17 @@ class RepositoriesFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val githubRepository = GithubRepositoryImpl()
-        val factory = ReposViewModel.Factory(githubRepository)
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://api.github.com/")
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create())
+            .build()
+
+        val api = retrofit.create(GithubService::class.java)
+
+        val schedulerProvider = RuntimeSchedulerProvider()
+        val githubRepository = GithubRepositoryImpl(api)
+        val factory = ReposViewModel.Factory(schedulerProvider, githubRepository)
         viewModel = ViewModelProviders.of(this, factory).get(ReposViewModel::class.java)
     }
 

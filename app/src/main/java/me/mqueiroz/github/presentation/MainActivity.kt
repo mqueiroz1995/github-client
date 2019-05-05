@@ -3,7 +3,7 @@ package me.mqueiroz.github.presentation
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import me.mqueiroz.github.R
-import me.mqueiroz.github.presentation.repositories.RepositoriesFragment
+import me.mqueiroz.github.presentation.repos.RepositoriesFragment
 
 class MainActivity : AppCompatActivity() {
 
