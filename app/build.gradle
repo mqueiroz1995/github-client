@@ -35,6 +35,7 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
 
     testImplementation "junit:junit:$junit_version"
+    testImplementation "org.mockito:mockito-core:$mockito_version"
 
     androidTestImplementation "androidx.test:runner:$android_test_runner_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
