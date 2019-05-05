@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'pl.droidsonroids.pitest'
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -39,4 +40,9 @@ dependencies {
 
     androidTestImplementation "androidx.test:runner:$android_test_runner_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
+}
+
+pitest {
+    targetClasses = ['me.mqueiroz.github.*']  //by default "${project.group}.*"
+    targetTests = ['*Test*']
 }
