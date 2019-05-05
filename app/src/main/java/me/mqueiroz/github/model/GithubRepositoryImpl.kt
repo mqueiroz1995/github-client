@@ -1,17 +1,16 @@
 package me.mqueiroz.github.model
 
+import io.reactivex.Observable
 import me.mqueiroz.github.model.data.Repo
-import java.util.*
+import me.mqueiroz.github.model.network.GithubService
 
-class GithubRepositoryImpl : GithubRepository {
-    override fun getRepos(): List<Repo> {
-        val repos = LinkedList<Repo>()
-        repos.add(Repo("test_1"))
-        repos.add(Repo("test_2"))
-        repos.add(Repo("test_3"))
-        repos.add(Repo("test_4"))
-        repos.add(Repo("test_5"))
+class GithubRepositoryImpl(
+    private val githubService: GithubService
+) : GithubRepository {
 
-        return repos
+    override fun getRepos(): Observable<List<Repo>> {
+        return githubService.getRepos()
+            .map { response -> response.items }
+            .toObservable()
     }
 }
