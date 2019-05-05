@@ -67,17 +67,15 @@
         tools:ignore="RtlHardcoded"
         tools:text="1000" />
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/repo_image"
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:contentDescription="TODO"
-        android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/repo_name"
-        app:srcCompat="@mipmap/ic_launcher" />
+        tools:src="@mipmap/ic_launcher" />
 
     <TextView
         android:id="@+id/repo_owner_username"
