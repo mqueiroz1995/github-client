@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.reactivex.disposables.CompositeDisposable
 import me.mqueiroz.github.model.GithubRepository
-import me.mqueiroz.github.model.data.Repo
 import me.mqueiroz.github.utils.schedulers.SchedulerProvider
 
 class ReposViewModel(
@@ -14,25 +13,23 @@ class ReposViewModel(
     private val githubRepository: GithubRepository
 ) : ViewModel() {
 
-    private val mRepos = MutableLiveData<List<Repo>>()
+    private val mState = MutableLiveData<ReposViewState>()
 
-    val repos: LiveData<List<Repo>> = mRepos
+    val state: LiveData<ReposViewState> = mState
 
     private val disposable = CompositeDisposable()
 
-    init {
-        getRepos()
-    }
-
-    private fun getRepos() {
+    fun getRepos() {
         disposable.add(
             githubRepository.getRepos()
                 .subscribeOn(schedulerProvider.computation())
                 .observeOn(schedulerProvider.ui())
-                .doOnNext { repos ->
-                    mRepos.value = repos
-                }.subscribe()
+                .doOnSubscribe { mState.value = ReposViewState.Loading }
+                .subscribe(
+                    { repos -> mState.value = ReposViewState.Loaded(repos) },
+                    { mState.value = ReposViewState.Error(it.message) })
         )
+
     }
 
     override fun onCleared() {

@@ -1,10 +1,10 @@
 package me.mqueiroz.github.presentation.repos
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -19,15 +19,15 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-class RepositoriesFragment : Fragment() {
+class ReposFragment : Fragment() {
 
     private lateinit var adapter: ReposAdapter
     private lateinit var viewModel: ReposViewModel
 
     companion object {
         @JvmStatic
-        fun newInstance(): RepositoriesFragment {
-            return RepositoriesFragment()
+        fun newInstance(): ReposFragment {
+            return ReposFragment()
         }
     }
 
@@ -35,10 +35,10 @@ class RepositoriesFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         val retrofit = Retrofit.Builder()
-                .baseUrl("https://api.github.com/")
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(MoshiConverterFactory.create())
-                .build()
+            .baseUrl("https://api.github.com/")
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create())
+            .build()
 
         val api = retrofit.create(GithubService::class.java)
 
@@ -46,6 +46,7 @@ class RepositoriesFragment : Fragment() {
         val githubRepository = GithubRepositoryImpl(api)
         val factory = ReposViewModel.Factory(schedulerProvider, githubRepository)
         viewModel = ViewModelProviders.of(this, factory).get(ReposViewModel::class.java)
+        viewModel.getRepos()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -64,8 +65,12 @@ class RepositoriesFragment : Fragment() {
         val dividerItemDecoration = DividerItemDecoration(recycler_view.context, layoutManager.orientation)
         recycler_view.addItemDecoration(dividerItemDecoration)
 
-        viewModel.repos.observe(this, Observer { repos ->
-            adapter.setRepos(repos)
+        viewModel.state.observe(this, Observer { state ->
+            when (state) {
+                is ReposViewState.Loading -> Log.d("Loading", "Loading")
+                is ReposViewState.Error -> Log.d("Loading", state.message)
+                is ReposViewState.Loaded -> adapter.setRepos(state.repos)
+            }
         })
     }
 }

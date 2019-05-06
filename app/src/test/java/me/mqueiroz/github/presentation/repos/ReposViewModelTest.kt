@@ -1,16 +1,13 @@
 package me.mqueiroz.github.presentation.repos
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.Observer
+import com.nhaarman.mockitokotlin2.*
 import io.reactivex.Observable
 import me.mqueiroz.github.model.GithubRepository
 import me.mqueiroz.github.model.data.Repo
-import me.mqueiroz.github.model.network.GetReposResponse
-import me.mqueiroz.github.presentation.repos.ReposViewModel
 import me.mqueiroz.github.utils.schedulers.TrampolineSchedulerProvider
-import org.junit.Assert.*
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.*
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.*
@@ -26,13 +23,19 @@ class ReposViewModelTest {
     @Mock
     lateinit var githubRepository: GithubRepository
 
+    @Mock
+    lateinit var stateObserver: Observer<ReposViewState>
+
     private val schedulerProvider = TrampolineSchedulerProvider()
 
     private lateinit var viewModel: ReposViewModel
 
     @Before
-    fun setup() {
+    fun setUp() {
         MockitoAnnotations.initMocks(this)
+
+        viewModel = ReposViewModel(schedulerProvider, githubRepository)
+        viewModel.state.observeForever(stateObserver)
     }
 
     @Test
@@ -42,9 +45,17 @@ class ReposViewModelTest {
         `when`(githubRepository.getRepos()).thenReturn(Observable.just(items))
 
         // when
-        val viewModel = ReposViewModel(schedulerProvider, githubRepository)
+        viewModel.getRepos()
 
         // then
-        assertEquals(viewModel.repos.value, items)
+        inOrder(stateObserver) {
+            verify(stateObserver).onChanged(ReposViewState.Loading)
+            verify(stateObserver).onChanged(ReposViewState.Loaded(items))
+        }
+    }
+
+    @After
+    fun tearDown() {
+        viewModel.state.removeObserver(stateObserver)
     }
 }
