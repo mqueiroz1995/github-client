@@ -3,7 +3,7 @@ package me.mqueiroz.github.presentation
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import me.mqueiroz.github.R
-import me.mqueiroz.github.presentation.repos.RepositoriesFragment
+import me.mqueiroz.github.presentation.repos.ReposFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.content, RepositoriesFragment.newInstance())
+                    .replace(R.id.content, ReposFragment.newInstance())
                     .commit()
         }
     }
