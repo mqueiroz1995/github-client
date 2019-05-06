@@ -39,7 +39,7 @@ class ReposViewModelTest {
     }
 
     @Test
-    fun init_ShouldSubscribeToRepository() {
+    fun getRepos_ShouldSetLoadedState_OnNext() {
         // given
         val items: List<Repo> = emptyList()
         `when`(githubRepository.getRepos()).thenReturn(Observable.just(items))
@@ -53,6 +53,23 @@ class ReposViewModelTest {
             verify(stateObserver).onChanged(ReposViewState.Loaded(items))
         }
     }
+
+    @Test
+    fun getRepos_ShouldSetErrorState_OnError() {
+        // given
+        val exception = RuntimeException("TestError")
+        `when`(githubRepository.getRepos()).thenReturn(Observable.error(exception))
+
+        // when
+        viewModel.getRepos()
+
+        // then
+        inOrder(stateObserver) {
+            verify(stateObserver).onChanged(ReposViewState.Loading)
+            verify(stateObserver).onChanged(ReposViewState.Error(exception.message))
+        }
+    }
+
 
     @After
     fun tearDown() {

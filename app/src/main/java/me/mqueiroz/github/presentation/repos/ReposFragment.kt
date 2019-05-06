@@ -1,10 +1,10 @@
 package me.mqueiroz.github.presentation.repos
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_repositories.*
 import me.mqueiroz.github.R
 import me.mqueiroz.github.model.GithubRepositoryImpl
+import me.mqueiroz.github.model.data.Repo
 import me.mqueiroz.github.model.network.GithubService
 import me.mqueiroz.github.utils.schedulers.RuntimeSchedulerProvider
 import retrofit2.Retrofit
@@ -35,10 +36,10 @@ class ReposFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.github.com/")
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(MoshiConverterFactory.create())
-            .build()
+                .baseUrl("https://api.github.com/")
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(MoshiConverterFactory.create())
+                .build()
 
         val api = retrofit.create(GithubService::class.java)
 
@@ -57,20 +58,38 @@ class ReposFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         adapter = ReposAdapter()
-        recycler_view.adapter = adapter
+        recyclerView.adapter = adapter
 
         val layoutManager = LinearLayoutManager(context)
-        recycler_view.layoutManager = layoutManager
+        recyclerView.layoutManager = layoutManager
 
-        val dividerItemDecoration = DividerItemDecoration(recycler_view.context, layoutManager.orientation)
-        recycler_view.addItemDecoration(dividerItemDecoration)
+        val dividerItemDecoration = DividerItemDecoration(recyclerView.context, layoutManager.orientation)
+        recyclerView.addItemDecoration(dividerItemDecoration)
+
+        recyclerView.visibility = View.GONE
+        progressBar.visibility = View.GONE
 
         viewModel.state.observe(this, Observer { state ->
             when (state) {
-                is ReposViewState.Loading -> Log.d("Loading", "Loading")
-                is ReposViewState.Error -> Log.d("Loading", state.message)
-                is ReposViewState.Loaded -> adapter.setRepos(state.repos)
+                is ReposViewState.Loading -> onLoading()
+                is ReposViewState.Error -> onError(state.message)
+                is ReposViewState.Loaded -> onLoaded(state.repos)
             }
         })
+    }
+
+    private fun onLoading() {
+        progressBar.visibility = View.VISIBLE
+    }
+
+    private fun onError(message: String?) {
+        progressBar.visibility = View.GONE
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+    }
+
+    private fun onLoaded(repos: List<Repo>) {
+        progressBar.visibility = View.GONE
+        recyclerView.visibility = View.VISIBLE
+        adapter.setRepos(repos)
     }
 }
