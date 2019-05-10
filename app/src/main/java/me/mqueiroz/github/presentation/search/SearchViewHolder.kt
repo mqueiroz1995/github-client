@@ -1,4 +1,4 @@
-package me.mqueiroz.github.presentation.repos
+package me.mqueiroz.github.presentation.search
 
 import android.view.View
 import com.squareup.picasso.Callback
@@ -9,7 +9,7 @@ import me.mqueiroz.github.model.data.Repo
 import me.mqueiroz.github.presentation.base.BaseViewHolder
 import java.lang.Exception
 
-class RepoViewHolder(
+class SearchViewHolder(
         itemView: View
 ) : BaseViewHolder<Repo>(itemView) {
 

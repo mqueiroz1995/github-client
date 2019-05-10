@@ -1,13 +1,12 @@
-package me.mqueiroz.github.presentation.repos
+package me.mqueiroz.github.presentation.search
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import me.mqueiroz.github.R
 import me.mqueiroz.github.model.data.Repo
 
-class ReposAdapter : RecyclerView.Adapter<RepoViewHolder>() {
+class SearchAdapter : RecyclerView.Adapter<SearchViewHolder>() {
 
     private var repos = emptyList<Repo>()
 
@@ -16,14 +15,14 @@ class ReposAdapter : RecyclerView.Adapter<RepoViewHolder>() {
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepoViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
         val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.list_item_repo, parent, false)
 
-        return RepoViewHolder(view)
+        return SearchViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: RepoViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
         holder.bind(repos[position])
     }
 

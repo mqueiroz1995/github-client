@@ -15,7 +15,7 @@ import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
-class ReposViewModelTest {
+class SearchViewModelTest {
 
     @get:Rule
     val rule = InstantTaskExecutorRule()
@@ -24,17 +24,17 @@ class ReposViewModelTest {
     lateinit var githubRepository: GithubRepository
 
     @Mock
-    lateinit var stateObserver: Observer<ReposViewState>
+    lateinit var stateObserver: Observer<SearchFragmentState>
 
     private val schedulerProvider = TrampolineSchedulerProvider()
 
-    private lateinit var viewModel: ReposViewModel
+    private lateinit var viewModel: SearchViewModel
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
 
-        viewModel = ReposViewModel(schedulerProvider, githubRepository)
+        viewModel = SearchViewModel(schedulerProvider, githubRepository)
         viewModel.state.observeForever(stateObserver)
     }
 
@@ -49,8 +49,9 @@ class ReposViewModelTest {
 
         // then
         inOrder(stateObserver) {
-            verify(stateObserver).onChanged(ReposViewState.Loading)
-            verify(stateObserver).onChanged(ReposViewState.Loaded(items))
+            verify(stateObserver).onChanged(SearchFragmentState.Loading)
+            verify(stateObserver).onChanged(SearchFragmentState.Loaded(items))
+            verifyNoMoreInteractions(stateObserver)
         }
     }
 
@@ -65,8 +66,9 @@ class ReposViewModelTest {
 
         // then
         inOrder(stateObserver) {
-            verify(stateObserver).onChanged(ReposViewState.Loading)
-            verify(stateObserver).onChanged(ReposViewState.Error(exception.message))
+            verify(stateObserver).onChanged(SearchFragmentState.Loading)
+            verify(stateObserver).onChanged(SearchFragmentState.Error(exception.message))
+            verifyNoMoreInteractions(stateObserver)
         }
     }
 

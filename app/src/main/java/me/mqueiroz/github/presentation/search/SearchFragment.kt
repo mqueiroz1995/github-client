@@ -1,4 +1,4 @@
-package me.mqueiroz.github.presentation.repos
+package me.mqueiroz.github.presentation.search
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.fragment_repositories.*
+import kotlinx.android.synthetic.main.fragment_search.*
 import me.mqueiroz.github.R
 import me.mqueiroz.github.model.GithubRepositoryImpl
 import me.mqueiroz.github.model.data.Repo
@@ -20,15 +20,15 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-class ReposFragment : Fragment() {
+class SearchFragment : Fragment() {
 
-    private lateinit var adapter: ReposAdapter
-    private lateinit var viewModel: ReposViewModel
+    private lateinit var adapter: SearchAdapter
+    private lateinit var viewModel: SearchViewModel
 
     companion object {
         @JvmStatic
-        fun newInstance(): ReposFragment {
-            return ReposFragment()
+        fun newInstance(): SearchFragment {
+            return SearchFragment()
         }
     }
 
@@ -45,19 +45,19 @@ class ReposFragment : Fragment() {
 
         val schedulerProvider = RuntimeSchedulerProvider()
         val githubRepository = GithubRepositoryImpl(api)
-        val factory = ReposViewModel.Factory(schedulerProvider, githubRepository)
-        viewModel = ViewModelProviders.of(this, factory).get(ReposViewModel::class.java)
+        val factory = SearchViewModel.Factory(schedulerProvider, githubRepository)
+        viewModel = ViewModelProviders.of(this, factory).get(SearchViewModel::class.java)
         viewModel.getRepos()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_repositories, container, false)
+        return inflater.inflate(R.layout.fragment_search, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = ReposAdapter()
+        adapter = SearchAdapter()
         recyclerView.adapter = adapter
 
         val layoutManager = LinearLayoutManager(context)
@@ -71,9 +71,9 @@ class ReposFragment : Fragment() {
 
         viewModel.state.observe(this, Observer { state ->
             when (state) {
-                is ReposViewState.Loading -> onLoading()
-                is ReposViewState.Error -> onError(state.message)
-                is ReposViewState.Loaded -> onLoaded(state.repos)
+                is SearchFragmentState.Loading -> onLoading()
+                is SearchFragmentState.Error -> onError(state.message)
+                is SearchFragmentState.Loaded -> onLoaded(state.repos)
             }
         })
     }

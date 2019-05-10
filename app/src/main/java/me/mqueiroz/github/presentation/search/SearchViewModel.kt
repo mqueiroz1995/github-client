@@ -1,4 +1,4 @@
-package me.mqueiroz.github.presentation.repos
+package me.mqueiroz.github.presentation.search
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,14 +8,14 @@ import io.reactivex.disposables.CompositeDisposable
 import me.mqueiroz.github.model.GithubRepository
 import me.mqueiroz.github.utils.schedulers.SchedulerProvider
 
-class ReposViewModel(
+class SearchViewModel(
     private val schedulerProvider: SchedulerProvider,
     private val githubRepository: GithubRepository
 ) : ViewModel() {
 
-    private val mState = MutableLiveData<ReposViewState>()
+    private val mState = MutableLiveData<SearchFragmentState>()
 
-    val state: LiveData<ReposViewState> = mState
+    val state: LiveData<SearchFragmentState> = mState
 
     private val disposable = CompositeDisposable()
 
@@ -23,10 +23,10 @@ class ReposViewModel(
         disposable.add(githubRepository.getRepos()
             .subscribeOn(schedulerProvider.computation())
             .observeOn(schedulerProvider.ui())
-            .doOnSubscribe { mState.value = ReposViewState.Loading }
+            .doOnSubscribe { mState.value = SearchFragmentState.Loading }
             .subscribe(
-                { repos -> mState.value = ReposViewState.Loaded(repos) },
-                { mState.value = ReposViewState.Error(it.message) })
+                { repos -> mState.value = SearchFragmentState.Loaded(repos) },
+                { mState.value = SearchFragmentState.Error(it.message) })
         )
     }
 
@@ -41,7 +41,7 @@ class ReposViewModel(
         private val githubRepository: GithubRepository
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return ReposViewModel(schedulerProvider, githubRepository) as T
+            return SearchViewModel(schedulerProvider, githubRepository) as T
         }
     }
 }
