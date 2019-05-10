@@ -25,21 +25,14 @@ class SearchFragment : Fragment() {
     private lateinit var adapter: SearchAdapter
     private lateinit var viewModel: SearchViewModel
 
-    companion object {
-        @JvmStatic
-        fun newInstance(): SearchFragment {
-            return SearchFragment()
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.github.com/")
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(MoshiConverterFactory.create())
-            .build()
+                .baseUrl("https://api.github.com/")
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(MoshiConverterFactory.create())
+                .build()
 
         val api = retrofit.create(GithubService::class.java)
 
