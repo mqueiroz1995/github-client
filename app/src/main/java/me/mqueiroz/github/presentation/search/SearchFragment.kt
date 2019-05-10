@@ -57,6 +57,13 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initRecyclerView()
+        initProgressBar()
+
+        bindViewModel()
+    }
+
+    private fun initRecyclerView() {
         adapter = SearchAdapter()
         recyclerView.adapter = adapter
 
@@ -67,8 +74,13 @@ class SearchFragment : Fragment() {
         recyclerView.addItemDecoration(dividerItemDecoration)
 
         recyclerView.visibility = View.GONE
-        progressBar.visibility = View.GONE
+    }
 
+    private fun initProgressBar() {
+        progressBar.visibility = View.GONE
+    }
+
+    private fun bindViewModel() {
         viewModel.state.observe(this, Observer { state ->
             when (state) {
                 is SearchFragmentState.Loading -> onLoading()

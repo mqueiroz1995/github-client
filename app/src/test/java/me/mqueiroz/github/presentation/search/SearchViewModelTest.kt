@@ -1,4 +1,4 @@
-package me.mqueiroz.github.presentation.repos
+package me.mqueiroz.github.presentation.search
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
