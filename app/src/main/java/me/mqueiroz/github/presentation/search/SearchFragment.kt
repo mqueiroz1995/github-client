@@ -61,6 +61,7 @@ class SearchFragment : Fragment() {
         initProgressBar()
 
         bindViewModel()
+        bindRecyclerViewAdapter()
     }
 
     private fun initRecyclerView() {
@@ -87,6 +88,11 @@ class SearchFragment : Fragment() {
                 is SearchFragmentState.Error -> onError(state.message)
                 is SearchFragmentState.Loaded -> onLoaded(state.repos)
             }
+        })
+    }
+
+    private fun bindRecyclerViewAdapter() {
+        adapter.onItemClickListener.observe(this, Observer {
         })
     }
 

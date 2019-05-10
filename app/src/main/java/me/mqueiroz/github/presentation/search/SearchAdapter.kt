@@ -5,10 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import me.mqueiroz.github.R
 import me.mqueiroz.github.model.data.Repo
+import me.mqueiroz.github.utils.SingleLiveEvent
 
 class SearchAdapter : RecyclerView.Adapter<SearchViewHolder>() {
 
     private var repos = emptyList<Repo>()
+
+    val onItemClickListener = SingleLiveEvent<Repo>()
 
     fun setRepos(repos: List<Repo>) {
         this.repos = repos
@@ -17,9 +20,9 @@ class SearchAdapter : RecyclerView.Adapter<SearchViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.list_item_repo, parent, false)
+            .inflate(R.layout.list_item_repo, parent, false)
 
-        return SearchViewHolder(view)
+        return SearchViewHolder(view, onItemClickListener)
     }
 
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {

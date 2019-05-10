@@ -7,10 +7,12 @@ import kotlinx.android.synthetic.main.list_item_repo.view.*
 import me.mqueiroz.github.R
 import me.mqueiroz.github.model.data.Repo
 import me.mqueiroz.github.presentation.base.BaseViewHolder
+import me.mqueiroz.github.utils.SingleLiveEvent
 import java.lang.Exception
 
 class SearchViewHolder(
-        itemView: View
+    itemView: View,
+    private val onClickListener: SingleLiveEvent<Repo>
 ) : BaseViewHolder<Repo>(itemView) {
 
     private val name = itemView.repo_name
@@ -30,16 +32,20 @@ class SearchViewHolder(
 
         progressBar.visibility = View.VISIBLE
         Picasso.get()
-                .load(obj.owner.avatarUrl)
-                .error(R.drawable.ic_error_outline)
-                .into(image, object : Callback {
-                    override fun onSuccess() {
-                        progressBar.visibility = View.GONE
-                    }
+            .load(obj.owner.avatarUrl)
+            .error(R.drawable.ic_error_outline)
+            .into(image, object : Callback {
+                override fun onSuccess() {
+                    progressBar.visibility = View.GONE
+                }
 
-                    override fun onError(e: Exception?) {
-                        progressBar.visibility = View.GONE
-                    }
-                })
+                override fun onError(e: Exception?) {
+                    progressBar.visibility = View.GONE
+                }
+            })
+
+        itemView.setOnClickListener {
+            onClickListener.value = obj
+        }
     }
 }
