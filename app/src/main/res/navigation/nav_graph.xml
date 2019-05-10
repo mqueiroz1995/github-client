@@ -17,5 +17,7 @@
     <fragment
         android:id="@+id/repoFragment"
         android:name="me.mqueiroz.github.presentation.repo.RepoFragment"
-        android:label="RepoFragment" />
+        android:label="RepoFragment" >
+        <argument android:name="repo" app:argType="me.mqueiroz.github.model.data.Repo"/>
+    </fragment>
 </navigation>

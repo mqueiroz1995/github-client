@@ -6,17 +6,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_repo.*
 import me.mqueiroz.github.R
 
 class RepoFragment : Fragment() {
+
+    private val args: RepoFragmentArgs by navArgs()
 
     private lateinit var viewModel: RepoViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this).get(RepoViewModel::class.java)
+        val factory = RepoViewModel.Factory(args.repo)
+        viewModel = ViewModelProviders.of(this, factory).get(RepoViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

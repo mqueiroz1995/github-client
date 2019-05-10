@@ -30,10 +30,10 @@ class SearchFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         val retrofit = Retrofit.Builder()
-                .baseUrl("https://api.github.com/")
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(MoshiConverterFactory.create())
-                .build()
+            .baseUrl("https://api.github.com/")
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create())
+            .build()
 
         val api = retrofit.create(GithubService::class.java)
 
@@ -87,7 +87,10 @@ class SearchFragment : Fragment() {
 
     private fun bindRecyclerViewAdapter() {
         adapter.onItemClickListener.observe(this, Observer {
-            findNavController().navigate(R.id.action_searchFragment_to_repoFragment)
+            it?.let { repo ->
+                val action = SearchFragmentDirections.actionSearchFragmentToRepoFragment(repo)
+                findNavController().navigate(action)
+            }
         })
     }
 
