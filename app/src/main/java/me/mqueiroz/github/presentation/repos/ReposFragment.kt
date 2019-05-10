@@ -36,10 +36,10 @@ class ReposFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         val retrofit = Retrofit.Builder()
-                .baseUrl("https://api.github.com/")
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(MoshiConverterFactory.create())
-                .build()
+            .baseUrl("https://api.github.com/")
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create())
+            .build()
 
         val api = retrofit.create(GithubService::class.java)
 
