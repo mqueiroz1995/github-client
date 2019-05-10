@@ -1,8 +1,11 @@
 package me.mqueiroz.github.model.data
 
+import android.os.Parcelable
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 @JsonClass(generateAdapter = true)
 data class Repo(
 
@@ -61,7 +64,7 @@ data class Repo(
     val sshUrl: String? = null,
 
     @Json(name = "license")
-    val license: Any? = null,
+    val license: License? = null,
 
     @Json(name = "full_name")
     val fullName: String? = null,
@@ -190,7 +193,7 @@ data class Repo(
     val contentsUrl: String? = null,
 
     @Json(name = "mirror_url")
-    val mirrorUrl: Any? = null,
+    val mirrorUrl: String? = null,
 
     @Json(name = "milestones_url")
     val milestonesUrl: String? = null,
@@ -227,4 +230,4 @@ data class Repo(
 
     @Json(name = "forks_count")
     val forksCount: Int? = null
-)
+) : Parcelable

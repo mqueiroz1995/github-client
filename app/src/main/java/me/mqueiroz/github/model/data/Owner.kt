@@ -1,8 +1,11 @@
 package me.mqueiroz.github.model.data
 
+import android.os.Parcelable
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 @JsonClass(generateAdapter = true)
 data class Owner(
 
@@ -59,4 +62,4 @@ data class Owner(
 
     @Json(name = "organizations_url")
     val organizationsUrl: String? = null
-)
+) : Parcelable
