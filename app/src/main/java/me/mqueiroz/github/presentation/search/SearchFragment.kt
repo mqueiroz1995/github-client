@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_search.*
@@ -86,6 +87,7 @@ class SearchFragment : Fragment() {
 
     private fun bindRecyclerViewAdapter() {
         adapter.onItemClickListener.observe(this, Observer {
+            findNavController().navigate(R.id.action_searchFragment_to_repoFragment)
         })
     }
 
